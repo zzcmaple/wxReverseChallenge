@@ -1,0 +1,53 @@
+<view class="page-shell">
+  <view class="panel hero-panel">
+    <view class="title">倒放挑战</view>
+    <view class="subtitle">录一段音频，保存原音和倒放版本。</view>
+    <view class="record-status {{isRecording ? 'recording' : ''}}">
+      <view class="status-dot"></view>
+      <text>{{statusText}}</text>
+    </view>
+    <view class="time-text">{{formattedDuration}}</view>
+    <view class="action-row">
+      <button
+        wx:if="{{!isRecording}}"
+        class="primary-btn action-btn"
+        bindtap="startRecording"
+        loading="{{loading}}"
+      >
+        开始录音
+      </button>
+      <button
+        wx:else
+        class="danger-btn action-btn"
+        bindtap="stopRecording"
+      >
+        结束录音
+      </button>
+    </view>
+    <view class="tip-text">建议控制在 3 到 15 秒。</view>
+  </view>
+
+  <view class="panel" wx:if="{{tempFilePath}}">
+    <view class="section-title">刚录好的原音</view>
+    <view class="file-meta">时长：{{formattedDuration}}</view>
+    <button class="secondary-btn small-btn" bindtap="playPreview" disabled="{{isRecording}}">
+      {{isPreviewPlaying ? '暂停试听' : '试听原音'}}
+    </button>
+    <view class="preview-progress">
+      <view class="preview-progress-track">
+        <view class="preview-progress-fill" style="width: {{previewProgress}}%;"></view>
+      </view>
+      <view class="preview-progress-meta">
+        <text>{{previewCurrentTimeText}}</text>
+        <text>{{previewDurationText}}</text>
+      </view>
+    </view>
+    <button class="primary-btn upload-btn" bindtap="submitAudio" loading="{{submitting}}">
+      生成倒放版本
+    </button>
+  </view>
+
+  <view class="quick-links">
+    <button class="secondary-btn link-btn" bindtap="goHistory">查看历史记录</button>
+  </view>
+</view>

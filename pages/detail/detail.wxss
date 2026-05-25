@@ -1,0 +1,102 @@
+.detail-panel {
+  margin-top: 20rpx;
+}
+
+.mimic-panel {
+  margin-top: 24rpx;
+}
+
+.section-head {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #24458d;
+  margin-bottom: 18rpx;
+}
+
+.simple-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #18243d;
+}
+
+.audio-meta {
+  color: #6f7f9a;
+  font-size: 26rpx;
+}
+
+.mimic-copy {
+  margin-top: 0;
+}
+
+.record-status {
+  margin-top: 24rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 14rpx;
+  background: #edf3ff;
+  color: #3157a3;
+  border-radius: 999rpx;
+  padding: 12rpx 22rpx;
+  font-size: 24rpx;
+}
+
+.recording {
+  background: #fff1f1;
+  color: #c03d46;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mimic-time {
+  margin-top: 20rpx;
+  font-size: 56rpx;
+}
+
+.play-btn {
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+.audio-divider {
+  margin: 32rpx 0;
+  height: 1rpx;
+  background: #e8edf6;
+}
+
+.hint-text {
+  margin-top: 16rpx;
+  color: #7b869d;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.player-status {
+  margin-top: 24rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 20rpx;
+  background: #edf3ff;
+  color: #27498f;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+}
+
+.action-panel {
+  margin-top: 24rpx;
+}
+
+.page-btn {
+  width: 100%;
+  margin-top: 18rpx;
+}

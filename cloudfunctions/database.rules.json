@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "records": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

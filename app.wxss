@@ -1,0 +1,63 @@
+page {
+  background: linear-gradient(180deg, #eef3ff 0%, #f9fbff 100%);
+  color: #18243d;
+  font-family: "PingFang SC", "Helvetica Neue", sans-serif;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 32rpx 24rpx 48rpx;
+  box-sizing: border-box;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 28rpx;
+  box-shadow: 0 18rpx 48rpx rgba(16, 24, 43, 0.08);
+  padding: 28rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #10182b;
+}
+
+.subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #5d6b86;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #10182b 0%, #1f3f86 100%);
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.secondary-btn {
+  background: #edf3ff;
+  color: #24458d;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.danger-btn {
+  background: #fff1f1;
+  color: #cc3d43;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.empty-text {
+  text-align: center;
+  color: #7f8ba3;
+  font-size: 26rpx;
+  padding: 72rpx 0;
+}

@@ -1,0 +1,98 @@
+.panel {
+  margin-top: 20rpx;
+}
+
+.record-status {
+  margin-top: 28rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 14rpx;
+  background: #edf3ff;
+  color: #3157a3;
+  border-radius: 999rpx;
+  padding: 12rpx 22rpx;
+  font-size: 24rpx;
+}
+
+.recording {
+  background: #fff1f1;
+  color: #c03d46;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.time-text {
+  margin-top: 24rpx;
+  font-size: 68rpx;
+  font-weight: 700;
+  color: #10182b;
+}
+
+.action-row {
+  margin-top: 28rpx;
+}
+
+.action-btn,
+.upload-btn,
+.small-btn,
+.link-btn {
+  width: 100%;
+}
+
+.tip-text {
+  margin-top: 20rpx;
+  color: #6d7890;
+  font-size: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #18243d;
+}
+
+.file-meta {
+  margin-top: 16rpx;
+  margin-bottom: 24rpx;
+  color: #70809d;
+  font-size: 26rpx;
+}
+
+.upload-btn {
+  margin-top: 18rpx;
+}
+
+.preview-progress {
+  margin-top: 20rpx;
+}
+
+.preview-progress-track {
+  width: 100%;
+  height: 12rpx;
+  background: #e6edf9;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.preview-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #24458d 0%, #4f8dff 100%);
+  border-radius: 999rpx;
+}
+
+.preview-progress-meta {
+  margin-top: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  color: #70809d;
+  font-size: 24rpx;
+}
+
+.quick-links {
+  margin-top: 24rpx;
+}

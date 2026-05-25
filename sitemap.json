@@ -1,0 +1,9 @@
+{
+  "desc": "sitemap for reverse challenge mini program",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}
