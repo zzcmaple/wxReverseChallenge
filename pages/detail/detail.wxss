@@ -4,13 +4,18 @@
 
 .mimic-panel {
   margin-top: 24rpx;
+  border-color: rgba(25, 200, 179, 0.25);
 }
 
 .section-head {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #24458d;
-  margin-bottom: 18rpx;
+  display: inline-flex;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(25, 200, 179, 0.13);
+  color: #168f84;
+  font-size: 24rpx;
+  font-weight: 800;
+  margin-bottom: 22rpx;
 }
 
 .simple-row {
@@ -20,14 +25,18 @@
 }
 
 .section-title {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #18243d;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #23313f;
+}
+
+.highlight-title {
+  color: #149f91;
 }
 
 .audio-meta {
-  color: #6f7f9a;
-  font-size: 26rpx;
+  color: #72808a;
+  font-size: 24rpx;
 }
 
 .mimic-copy {
@@ -39,16 +48,16 @@
   display: inline-flex;
   align-items: center;
   gap: 14rpx;
-  background: #edf3ff;
-  color: #3157a3;
+  background: #effaf7;
+  color: #168f84;
   border-radius: 999rpx;
   padding: 12rpx 22rpx;
   font-size: 24rpx;
 }
 
 .recording {
-  background: #fff1f1;
-  color: #c03d46;
+  background: #fff1f4;
+  color: #df4f70;
 }
 
 .status-dot {
@@ -59,8 +68,10 @@
 }
 
 .mimic-time {
-  margin-top: 20rpx;
-  font-size: 56rpx;
+  margin-top: 18rpx;
+  font-size: 58rpx;
+  font-weight: 800;
+  color: #1d2c39;
 }
 
 .play-btn {
@@ -68,15 +79,25 @@
   margin-top: 20rpx;
 }
 
+.small-play-btn {
+  min-width: 164rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  padding: 0 22rpx;
+  margin-top: 18rpx;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .audio-divider {
-  margin: 32rpx 0;
+  margin: 30rpx 0;
   height: 1rpx;
-  background: #e8edf6;
+  background: #e7eef0;
 }
 
 .hint-text {
   margin-top: 16rpx;
-  color: #7b869d;
+  color: #77858e;
   font-size: 24rpx;
   line-height: 1.6;
 }
@@ -84,9 +105,9 @@
 .player-status {
   margin-top: 24rpx;
   padding: 18rpx 20rpx;
-  border-radius: 20rpx;
-  background: #edf3ff;
-  color: #27498f;
+  border-radius: 16rpx;
+  background: #effaf7;
+  color: #168f84;
   display: flex;
   justify-content: space-between;
   font-size: 24rpx;

@@ -5,14 +5,14 @@
       <view class="section-title">原音</view>
       <view class="audio-meta">{{record.durationText}}</view>
     </view>
-    <button class="secondary-btn play-btn" bindtap="playOriginal">
+    <button class="ghost-btn small-play-btn" bindtap="playOriginal">
       {{playingType === 'original' ? '暂停原音' : '听原音'}}
     </button>
 
     <view class="audio-divider"></view>
 
     <view class="simple-row">
-      <view class="section-title">倒放版本</view>
+      <view class="section-title highlight-title">倒放版本</view>
       <view class="audio-meta">{{record.durationText}}</view>
     </view>
     <button
@@ -32,7 +32,7 @@
 
   <view class="panel mimic-panel" wx:if="{{record}}">
     <view class="section-head">模仿区</view>
-    <view class="subtitle mimic-copy">先听原生区的倒放版本，再模仿说出来，最后把你的声音再倒放回去听。</view>
+    <view class="subtitle mimic-copy">先听倒放，再照着说一遍，把你的声音倒回来看看。</view>
     <view class="record-status {{isMimicRecording ? 'recording' : ''}}">
       <view class="status-dot"></view>
       <text>{{mimicStatusText}}</text>
@@ -56,8 +56,8 @@
     </button>
 
     <view wx:if="{{mimicTempFilePath}}">
-      <button class="secondary-btn play-btn" bindtap="playMimicPreview">
-        {{isMimicPreviewPlaying ? '暂停试听模仿原音' : '试听模仿原音'}}
+      <button class="ghost-btn small-play-btn" bindtap="playMimicPreview">
+        {{isMimicPreviewPlaying ? '暂停原音' : '试听原音'}}
       </button>
       <button class="primary-btn play-btn" bindtap="submitMimicAudio" loading="{{mimicSubmitting}}">
         生成倒放版本
@@ -71,14 +71,14 @@
       <view class="section-title">原音</view>
       <view class="audio-meta">{{mimicRecord.durationText}}</view>
     </view>
-    <button class="secondary-btn play-btn" bindtap="playMimicOriginal">
+    <button class="ghost-btn small-play-btn" bindtap="playMimicOriginal">
       {{playingType === 'mimicOriginal' ? '暂停原音' : '听原音'}}
     </button>
 
     <view class="audio-divider"></view>
 
     <view class="simple-row">
-      <view class="section-title">倒放版本</view>
+      <view class="section-title highlight-title">倒放版本</view>
       <view class="audio-meta">{{mimicRecord.durationText}}</view>
     </view>
     <button
@@ -91,12 +91,12 @@
     <view class="hint-text" wx:if="{{mimicRecord.status !== 'done'}}">{{mimicReverseHint}}</view>
 
     <view class="player-status" wx:if="{{playingType === 'mimicOriginal' || playingType === 'mimicReverse'}}">
-      <text>播放中：{{playingType === 'mimicOriginal' ? '原音' : ' 倒放版本'}}</text>
+      <text>播放中：{{playingType === 'mimicOriginal' ? '原音' : '倒放版本'}}</text>
       <text>{{currentTimeText}} / {{durationText}}</text>
     </view>
   </view>
 
   <view class="panel action-panel" wx:if="{{record}}">
-    <button class="primary-btn page-btn" bindtap="goHistory">查看历史记录</button>
+    <button class="secondary-btn page-btn" bindtap="goHistory">查看历史记录</button>
   </view>
 </view>

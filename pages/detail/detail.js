@@ -75,6 +75,11 @@ function writeWavFile(arrayBuffer) {
   });
 }
 
+function shouldIgnoreRecorderError(error) {
+  const message = (error && (error.errMsg || error.message)) || "";
+  return message.includes("instanceId") || message.includes("auditInstance");
+}
+
 Page({
   data: {
     id: "",
@@ -82,7 +87,7 @@ Page({
     record: null,
     mimicRecord: null,
     reverseHint: "倒放版本还在处理中",
-    mimicReverseHint: "玩家 B 的倒放版本还在处理中",
+    mimicReverseHint: "模仿倒放版本还在处理中",
     playingType: "",
     currentTimeText: "00:00",
     durationText: "00:00",
@@ -100,7 +105,138 @@ Page({
     detailAudio.autoplay = false;
     previewAudio.obeyMuteSwitch = false;
     previewAudio.autoplay = false;
+    this.bindDetailAudioEvents();
+    this.bindPreviewAudioEvents();
 
+    if (!options.id) {
+      wx.showToast({
+        title: "缺少记录编号",
+        icon: "none"
+      });
+      return;
+    }
+
+    this.setData({
+      id: options.id
+    });
+
+    this.fetchRecord();
+  },
+
+  onShow() {
+    this.bindRecorderEvents();
+  },
+
+  onHide() {
+    this.unbindRecorderEvents();
+  },
+
+  onUnload() {
+    this.stopMimicTimer();
+    this.unbindRecorderEvents();
+    detailAudio.destroy();
+    previewAudio.destroy();
+  },
+
+  bindRecorderEvents() {
+    this.unbindRecorderEvents();
+
+    this._onRecorderStart = () => {
+      pcmFrames = [];
+      this.setData({
+        isMimicRecording: true,
+        mimicStatusText: "录音中，请模仿你听到的倒放声音",
+        mimicDuration: 0,
+        mimicDurationText: "00:00",
+        mimicTempFilePath: "",
+        isMimicPreviewPlaying: false
+      });
+      this.startMimicTimer();
+    };
+
+    this._onRecorderFrame = (res) => {
+      if (this.data.isMimicRecording && res.frameBuffer) {
+        pcmFrames.push(res.frameBuffer);
+      }
+    };
+
+    this._onRecorderStop = async () => {
+      this.stopMimicTimer();
+
+      if (previewAudio.src) {
+        previewAudio.pause();
+      }
+
+      try {
+        if (!pcmFrames.length) {
+          throw new Error("没有收到录音数据，请重新录制");
+        }
+
+        const pcmBuffer = concatArrayBuffers(pcmFrames);
+        const wavBuffer = createWavArrayBuffer(pcmBuffer, 16000, 1, 16);
+        const wavFilePath = await writeWavFile(wavBuffer);
+
+        this.setData({
+          isMimicRecording: false,
+          mimicStatusText: "模仿录音完成，可以试听或生成倒放",
+          mimicTempFilePath: wavFilePath,
+          mimicDurationText: formatDuration(this.data.mimicDuration)
+        });
+      } catch (error) {
+        this.setData({
+          isMimicRecording: false,
+          mimicStatusText: "模仿录音处理失败，请重试"
+        });
+        wx.showToast({
+          title: error.errMsg || error.message || "录音处理失败",
+          icon: "none"
+        });
+      }
+    };
+
+    this._onRecorderError = (error) => {
+      if (shouldIgnoreRecorderError(error)) {
+        console.warn("已忽略录音内部提示", error);
+        return;
+      }
+
+      this.stopMimicTimer();
+      this.setData({
+        isMimicRecording: false,
+        mimicStatusText: "模仿录音失败，请重试"
+      });
+      wx.showToast({
+        title: error.errMsg || "录音失败",
+        icon: "none"
+      });
+    };
+
+    recorderManager.onStart(this._onRecorderStart);
+    recorderManager.onFrameRecorded(this._onRecorderFrame);
+    recorderManager.onStop(this._onRecorderStop);
+    recorderManager.onError(this._onRecorderError);
+  },
+
+  unbindRecorderEvents() {
+    if (this._onRecorderStart && recorderManager.offStart) {
+      recorderManager.offStart(this._onRecorderStart);
+    }
+    if (this._onRecorderFrame && recorderManager.offFrameRecorded) {
+      recorderManager.offFrameRecorded(this._onRecorderFrame);
+    }
+    if (this._onRecorderStop && recorderManager.offStop) {
+      recorderManager.offStop(this._onRecorderStop);
+    }
+    if (this._onRecorderError && recorderManager.offError) {
+      recorderManager.offError(this._onRecorderError);
+    }
+    this._onRecorderStart = null;
+    this._onRecorderFrame = null;
+    this._onRecorderStop = null;
+    this._onRecorderError = null;
+  },
+
+  bindDetailAudioEvents() {
     detailAudio.onPlay(() => {
       const record = this.resolveCurrentPlayRecord();
       this.setData({
@@ -138,7 +274,9 @@ Page({
         icon: "none"
       });
     });
+  },
 
+  bindPreviewAudioEvents() {
     previewAudio.onPlay(() => {
       this.setData({
         isMimicPreviewPlaying: true
@@ -172,92 +310,6 @@ Page({
         icon: "none"
       });
     });
-
-    recorderManager.onStart(() => {
-      pcmFrames = [];
-      this.setData({
-        isMimicRecording: true,
-        mimicStatusText: "录音中，请模仿你听到的倒放声音",
-        mimicDuration: 0,
-        mimicDurationText: "00:00",
-        mimicTempFilePath: "",
-        isMimicPreviewPlaying: false
-      });
-      this.startMimicTimer();
-    });
-
-    recorderManager.onFrameRecorded((res) => {
-      if (this.data.isMimicRecording && res.frameBuffer) {
-        pcmFrames.push(res.frameBuffer);
-      }
-    });
-
-    recorderManager.onStop(async () => {
-      this.stopMimicTimer();
-
-      try {
-        previewAudio.pause();
-      } catch (error) {
-        console.warn("暂停模仿试听失败", error);
-      }
-
-      try {
-        const pcmBuffer = concatArrayBuffers(pcmFrames);
-        const wavBuffer = createWavArrayBuffer(pcmBuffer, 16000, 1, 16);
-        const wavFilePath = await writeWavFile(wavBuffer);
-
-        this.setData({
-          isMimicRecording: false,
-          mimicStatusText: "模仿录音完成，可以试听或生成倒放",
-          mimicTempFilePath: wavFilePath,
-          mimicDurationText: formatDuration(this.data.mimicDuration)
-        });
-      } catch (error) {
-        this.setData({
-          isMimicRecording: false,
-          mimicStatusText: "模仿录音处理失败，请重试"
-        });
-        wx.showToast({
-          title: error.errMsg || error.message || "录音处理失败",
-          icon: "none"
-        });
-      }
-    });
-
-    recorderManager.onError((error) => {
-      this.stopMimicTimer();
-      this.setData({
-        isMimicRecording: false,
-        mimicStatusText: "模仿录音失败，请重试"
-      });
-      wx.showToast({
-        title: error.errMsg || "录音失败",
-        icon: "none"
-      });
-    });
-
-    if (!options.id) {
-      wx.showToast({
-        title: "缺少记录编号",
-        icon: "none"
-      });
-      return;
-    }
-
-    this.setData({
-      id: options.id
-    });
-
-    this.fetchRecord();
-  },
-
-  onUnload() {
-    if (mimicTimer) {
-      clearInterval(mimicTimer);
-      mimicTimer = null;
-    }
-    detailAudio.destroy();
-    previewAudio.destroy();
   },
 
   resolveCurrentPlayRecord() {
@@ -322,9 +374,9 @@ Page({
         failed: "倒放版本生成失败，请重新录音再试"
       };
       const mimicReverseHintMap = {
-        processing: "玩家 B 的倒放版本还在处理中",
+        processing: "模仿倒放版本还在处理中",
         done: "",
-        failed: "玩家 B 的倒放版本生成失败，请重新录音再试"
+        failed: "模仿倒放版本生成失败，请重新录音再试"
       };
 
       this.setData({
@@ -340,7 +392,7 @@ Page({
           }
           : null,
         reverseHint: reverseHintMap[record.status] || "暂时无法获取结果",
-        mimicReverseHint: mimicRecord ? (mimicReverseHintMap[mimicRecord.status] || "暂时无法获取结果") : "玩家 B 的倒放版本还在处理中",
+        mimicReverseHint: mimicRecord ? (mimicReverseHintMap[mimicRecord.status] || "暂时无法获取结果") : "模仿倒放版本还在处理中",
         currentTimeText: "00:00",
         durationText: formatDuration(record.duration)
       });
@@ -468,7 +520,7 @@ Page({
 
     this.setData({
       mimicSubmitting: true,
-      mimicStatusText: "正在生成玩家 B 的倒放版本"
+      mimicStatusText: "正在生成模仿倒放版本"
     });
 
     wx.showLoading({
@@ -489,7 +541,7 @@ Page({
 
       this.setData({
         mimicSubmitting: false,
-        mimicStatusText: "玩家 B 的原音和倒放版本已生成",
+        mimicStatusText: "模仿原音和倒放版本已生成",
         mimicTempFilePath: ""
       });
     } catch (error) {
@@ -510,7 +562,7 @@ Page({
     const { mimicRecord, playingType } = this.data;
     if (!mimicRecord || !mimicRecord.originalTempUrl) {
       wx.showToast({
-        title: "玩家 B 原音暂不可播放",
+        title: "模仿原音暂不可播放",
         icon: "none"
       });
       return;
@@ -532,7 +584,7 @@ Page({
     const { mimicRecord, playingType } = this.data;
     if (!mimicRecord || mimicRecord.status !== "done" || !mimicRecord.reversedTempUrl) {
       wx.showToast({
-        title: this.data.mimicReverseHint || "玩家 B 倒放版本暂不可播放",
+        title: this.data.mimicReverseHint || "模仿倒放版本暂不可播放",
         icon: "none"
       });
       return;

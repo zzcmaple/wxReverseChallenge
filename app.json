@@ -6,9 +6,9 @@
   ],
   "window": {
     "navigationBarTitleText": "倒放挑战",
-    "navigationBarBackgroundColor": "#10182b",
+    "navigationBarBackgroundColor": "#19c8b3",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f7fb",
+    "backgroundColor": "#eafcf8",
     "backgroundTextStyle": "light"
   },
   "style": "v2",

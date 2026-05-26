@@ -1,7 +1,7 @@
 <view class="page-shell">
   <view class="panel">
     <view class="title">历史记录</view>
-    <view class="subtitle">所有录音记录都会保留在这里。</view>
+    <view class="subtitle">每一次倒放挑战都会留在这里。</view>
   </view>
 
   <view class="panel list-panel" wx:if="{{records.length}}">
@@ -33,6 +33,6 @@
   </view>
 
   <view class="panel" wx:else>
-    <view class="empty-text">还没有历史记录，先去录一条试试。</view>
+    <view class="empty-text">还没有记录，先去录一条试试。</view>
   </view>
 </view>

@@ -1,63 +1,77 @@
 page {
-  background: linear-gradient(180deg, #eef3ff 0%, #f9fbff 100%);
-  color: #18243d;
+  background:
+    linear-gradient(135deg, rgba(255, 237, 171, 0.62) 0%, rgba(184, 244, 255, 0.6) 46%, rgba(255, 214, 229, 0.68) 100%);
+  color: #23313f;
   font-family: "PingFang SC", "Helvetica Neue", sans-serif;
 }
 
 .page-shell {
   min-height: 100vh;
-  padding: 32rpx 24rpx 48rpx;
+  padding: 30rpx 24rpx 52rpx;
   box-sizing: border-box;
 }
 
 .panel {
-  background: rgba(255, 255, 255, 0.94);
-  border-radius: 28rpx;
-  box-shadow: 0 18rpx 48rpx rgba(16, 24, 43, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 2rpx solid rgba(255, 255, 255, 0.74);
+  border-radius: 22rpx;
+  box-shadow: 0 18rpx 42rpx rgba(63, 122, 147, 0.12);
   padding: 28rpx;
+  backdrop-filter: blur(12rpx);
 }
 
 .title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #10182b;
+  font-size: 42rpx;
+  font-weight: 800;
+  color: #182433;
+  letter-spacing: 0;
 }
 
 .subtitle {
   margin-top: 12rpx;
   font-size: 26rpx;
   line-height: 1.6;
-  color: #5d6b86;
+  color: #5f6f7a;
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #10182b 0%, #1f3f86 100%);
+  background: linear-gradient(135deg, #19c8b3 0%, #2f8fff 100%);
   color: #fff;
   border-radius: 999rpx;
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
+  box-shadow: 0 12rpx 24rpx rgba(47, 143, 255, 0.22);
 }
 
 .secondary-btn {
-  background: #edf3ff;
-  color: #24458d;
+  background: #effaf7;
+  color: #188f84;
   border-radius: 999rpx;
-  font-size: 28rpx;
-  border: none;
+  font-size: 26rpx;
+  border: 1rpx solid rgba(25, 200, 179, 0.22);
+}
+
+.ghost-btn {
+  background: rgba(255, 255, 255, 0.7);
+  color: #64717d;
+  border: 1rpx solid rgba(100, 113, 125, 0.18);
+  border-radius: 999rpx;
+  font-size: 24rpx;
 }
 
 .danger-btn {
-  background: #fff1f1;
-  color: #cc3d43;
+  background: linear-gradient(135deg, #ff6d88 0%, #ff9a5c 100%);
+  color: #fff;
   border-radius: 999rpx;
   font-size: 28rpx;
   border: none;
+  box-shadow: 0 12rpx 24rpx rgba(255, 109, 136, 0.2);
 }
 
 .empty-text {
   text-align: center;
-  color: #7f8ba3;
+  color: #788791;
   font-size: 26rpx;
   padding: 72rpx 0;
 }

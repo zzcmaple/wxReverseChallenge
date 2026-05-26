@@ -74,6 +74,11 @@ function writeWavFile(arrayBuffer) {
   });
 }
 
+function shouldIgnoreRecorderError(error) {
+  const message = (error && (error.errMsg || error.message)) || "";
+  return message.includes("instanceId") || message.includes("auditInstance");
+}
+
 Page({
   data: {
     isRecording: false,
@@ -92,8 +97,27 @@ Page({
   onLoad() {
     previewAudio.obeyMuteSwitch = false;
     previewAudio.autoplay = false;
+    this.bindPreviewAudioEvents();
+  },
 
-    recorderManager.onStart(() => {
+  onShow() {
+    this.bindRecorderEvents();
+  },
+
+  onHide() {
+    this.unbindRecorderEvents();
+  },
+
+  onUnload() {
+    this.stopTimer();
+    this.unbindRecorderEvents();
+    previewAudio.destroy();
+  },
+
+  bindRecorderEvents() {
+    this.unbindRecorderEvents();
+
+    this._onRecorderStart = () => {
       pcmFrames = [];
       this.setData({
         isRecording: true,
@@ -107,18 +131,20 @@ Page({
         previewDurationText: "00:00"
       });
       this.startTimer();
-    });
+    };
 
-    recorderManager.onStop(async () => {
+    this._onRecorderStop = async () => {
       this.stopTimer();
 
-      try {
+      if (previewAudio.src) {
         previewAudio.pause();
-      } catch (error) {
-        console.warn("暂停试听失败", error);
       }
 
       try {
+        if (!pcmFrames.length) {
+          throw new Error("没有收到录音数据，请重新录制");
+        }
+
         const pcmBuffer = concatArrayBuffers(pcmFrames);
         const wavBuffer = createWavArrayBuffer(pcmBuffer, 16000, 1, 16);
         const wavFilePath = await writeWavFile(wavBuffer);
@@ -137,16 +163,27 @@ Page({
         this.setData({
           isRecording: false,
           loading: false,
-          statusText: "录音转换失败，请重试"
+          statusText: "录音处理失败，请重试"
         });
         wx.showToast({
           title: error.errMsg || error.message || "录音处理失败",
           icon: "none"
         });
       }
-    });
+    };
 
-    recorderManager.onError((error) => {
+    this._onRecorderFrame = (res) => {
+      if (this.data.isRecording && res.frameBuffer) {
+        pcmFrames.push(res.frameBuffer);
+      }
+    };
+
+    this._onRecorderError = (error) => {
+      if (shouldIgnoreRecorderError(error)) {
+        console.warn("已忽略录音内部提示", error);
+        return;
+      }
+
       this.stopTimer();
       this.setData({
         isRecording: false,
@@ -157,14 +194,34 @@ Page({
         title: error.errMsg || "录音失败",
         icon: "none"
       });
-    });
+    };
 
-    recorderManager.onFrameRecorded((res) => {
-      if (res.frameBuffer) {
-        pcmFrames.push(res.frameBuffer);
-      }
-    });
+    recorderManager.onStart(this._onRecorderStart);
+    recorderManager.onStop(this._onRecorderStop);
+    recorderManager.onFrameRecorded(this._onRecorderFrame);
+    recorderManager.onError(this._onRecorderError);
+  },
 
+  unbindRecorderEvents() {
+    if (this._onRecorderStart && recorderManager.offStart) {
+      recorderManager.offStart(this._onRecorderStart);
+    }
+    if (this._onRecorderStop && recorderManager.offStop) {
+      recorderManager.offStop(this._onRecorderStop);
+    }
+    if (this._onRecorderFrame && recorderManager.offFrameRecorded) {
+      recorderManager.offFrameRecorded(this._onRecorderFrame);
+    }
+    if (this._onRecorderError && recorderManager.offError) {
+      recorderManager.offError(this._onRecorderError);
+    }
+    this._onRecorderStart = null;
+    this._onRecorderStop = null;
+    this._onRecorderFrame = null;
+    this._onRecorderError = null;
+  },
+
+  bindPreviewAudioEvents() {
     previewAudio.onCanplay(() => {
       const durationSeconds = Math.floor(previewAudio.duration || 0);
       if (!durationSeconds) {
@@ -228,11 +285,6 @@ Page({
     });
   },
 
-  onUnload() {
-    this.stopTimer();
-    previewAudio.destroy();
-  },
-
   startTimer() {
     this.stopTimer();
     timer = setInterval(() => {
@@ -252,6 +304,10 @@ Page({
   },
 
   startRecording() {
+    if (this.data.isRecording || this.data.submitting) {
+      return;
+    }
+
     this.setData({
       loading: true,
       statusText: "正在申请录音权限"
@@ -288,6 +344,9 @@ Page({
   },
 
   stopRecording() {
+    if (!this.data.isRecording) {
+      return;
+    }
     recorderManager.stop();
   },
 
@@ -328,7 +387,8 @@ Page({
     });
 
     wx.showLoading({
-      title: "生成中"
+      title: "生成中",
+      mask: true
     });
 
     try {

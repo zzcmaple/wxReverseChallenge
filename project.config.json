@@ -1,7 +1,16 @@
 {
   "description": "Reverse audio challenge mini program",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": ".git"
+      },
+      {
+        "type": "folder",
+        "value": ".cloudbase"
+      }
+    ],
     "include": []
   },
   "setting": {
@@ -33,7 +42,7 @@
   "compileType": "miniprogram",
   "cloudfunctionRoot": "cloudfunctions/",
   "libVersion": "3.6.4",
-  "appid": "这里是你自己的appId",
+  "appid": "你自己的appId",
   "projectname": "wx-reverse-challenge",
   "simulatorType": "wechat",
   "condition": {},

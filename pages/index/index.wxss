@@ -2,21 +2,48 @@
   margin-top: 20rpx;
 }
 
+.hero-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-panel::after {
+  content: "";
+  position: absolute;
+  right: -80rpx;
+  top: -70rpx;
+  width: 210rpx;
+  height: 210rpx;
+  border-radius: 50%;
+  background: rgba(255, 216, 91, 0.38);
+}
+
+.hero-kicker {
+  display: inline-flex;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: rgba(25, 200, 179, 0.14);
+  color: #168f84;
+  font-size: 22rpx;
+  font-weight: 700;
+  margin-bottom: 16rpx;
+}
+
 .record-status {
   margin-top: 28rpx;
   display: inline-flex;
   align-items: center;
   gap: 14rpx;
-  background: #edf3ff;
-  color: #3157a3;
+  background: #effaf7;
+  color: #168f84;
   border-radius: 999rpx;
   padding: 12rpx 22rpx;
   font-size: 24rpx;
 }
 
 .recording {
-  background: #fff1f1;
-  color: #c03d46;
+  background: #fff1f4;
+  color: #df4f70;
 }
 
 .status-dot {
@@ -27,72 +54,83 @@
 }
 
 .time-text {
-  margin-top: 24rpx;
-  font-size: 68rpx;
-  font-weight: 700;
-  color: #10182b;
+  margin-top: 22rpx;
+  font-size: 76rpx;
+  font-weight: 800;
+  color: #1d2c39;
 }
 
 .action-row {
-  margin-top: 28rpx;
+  margin-top: 26rpx;
 }
 
 .action-btn,
 .upload-btn,
-.small-btn,
 .link-btn {
   width: 100%;
 }
 
 .tip-text {
-  margin-top: 20rpx;
-  color: #6d7890;
+  margin-top: 18rpx;
+  color: #6f7d86;
   font-size: 24rpx;
 }
 
+.result-panel {
+  border-color: rgba(25, 200, 179, 0.25);
+}
+
 .section-title {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #18243d;
+  font-size: 31rpx;
+  font-weight: 800;
+  color: #23313f;
 }
 
 .file-meta {
-  margin-top: 16rpx;
-  margin-bottom: 24rpx;
-  color: #70809d;
-  font-size: 26rpx;
+  margin-top: 10rpx;
+  margin-bottom: 18rpx;
+  color: #72808a;
+  font-size: 24rpx;
+}
+
+.preview-btn {
+  min-width: 176rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  padding: 0 24rpx;
+  margin: 0;
 }
 
 .upload-btn {
-  margin-top: 18rpx;
+  margin-top: 22rpx;
 }
 
 .preview-progress {
-  margin-top: 20rpx;
+  margin-top: 18rpx;
 }
 
 .preview-progress-track {
   width: 100%;
-  height: 12rpx;
-  background: #e6edf9;
+  height: 10rpx;
+  background: #e9f0f1;
   border-radius: 999rpx;
   overflow: hidden;
 }
 
 .preview-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #24458d 0%, #4f8dff 100%);
+  background: linear-gradient(90deg, #19c8b3 0%, #2f8fff 100%);
   border-radius: 999rpx;
 }
 
 .preview-progress-meta {
-  margin-top: 12rpx;
+  margin-top: 10rpx;
   display: flex;
   justify-content: space-between;
-  color: #70809d;
-  font-size: 24rpx;
+  color: #7a8790;
+  font-size: 22rpx;
 }
 
 .quick-links {
-  margin-top: 24rpx;
+  margin-top: 22rpx;
 }
